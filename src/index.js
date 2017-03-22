@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 
 /*  The EmitterReceiver class aims to provide off-site rendering capabilities
  *  to React
- *  An instance of EmitterReceiver provides to Component classes, Emitter and
+ *  An instance of EmitterReceiver provides two Component classes, Emitter and
  *  Receiver.
  *
  *  The Receiver component has to be placed wherever the actual render has to
@@ -53,40 +53,38 @@ export class EmitterReceiver {
         this.add = this.add.bind(this)
       }
 
+      getChildArray() {
+        // Get the content from the Emitter
+        let child = this.props.children
+
+        // Check if the Emitter actually has content
+        if (child !== null && child !== undefined) {
+          return child.length ? child : [child]  // Convert into Array
+        }
+
+        return []
+      }
+
       // During its lifecycle, the component might need to remove its content
       // from the Receivers
       remove() {
-        // Get the content from the Emitter
-        let child = this.props.children
-        // Check if the Emitter actually has content
-        if (child !== null && child !== undefined) {
-          child = child.length ? child : [child]  // Convert into Array
+        // For each child, remove it from the children list
+        this.getChildArray().map(c => {
+          children.splice(children.indexOf(c), 1)
+        })
 
-          // For each child, remove it from the children list
-          child.map(c => {
-            children.splice(children.indexOf(c), 1)
-          })
-
-          // Update each Receiver
-          triggerReceivers()
-        }
+        // Update each Receiver
+        triggerReceivers()
       }
 
       // During its lifecycle, the component will need to give its content to
       // the Receivers
       add() {
-        // Get the content from the Emitter
-        let child = this.props.children
-        // Check if the Emitter acutally has content
-        if (child !== null && child !== undefined) {
-          child = child.length ? child : [child]  // Convert into Array
+        // Add all children to the list
+        children.push(...this.getChildArray())
 
-          // Add all children to the list
-          children.push(...child)
-
-          // Update each Receiver
-          triggerReceivers()
-        }
+        // Update each Receiver
+        triggerReceivers()
       }
 
       // When the component umounts or is about to be updated, we need
