@@ -31,5 +31,7 @@ describe('Emitter and Receiver', () => {
     const emitter2 = mount(<Emitter><Block /></Emitter>)
     expectToFindBlocks(receiver, 2)
     expectToFindBlocks(receiver2, 2)
+    emitter2.unmount()
+    expectToFindBlocks(receiver, 1)
   })
 })
