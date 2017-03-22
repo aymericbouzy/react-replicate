@@ -22,14 +22,23 @@ import React, {Component} from 'react'
  */
 export class EmitterReceiver {
   constructor() {
-    // The 'pipe' variable will serve as communication point between the
-    // receivers and the emitters
-    let pipe = this
-
     // The 'children' array will store every node to display inside a Receiver
-    this.children = []
+    let children = []
     // The 'receivers' array stores every registered Receiver
-    this.receivers = []
+    let receivers = []
+
+    // Add a Receiver to the list of Receivers
+    function registerReceiver(r) {
+      receivers.push(r)
+    }
+    // Remove a Receiver from the list of Receivers
+    function removeReceiver(r) {
+      receivers.splice(receivers.indexOf(r), 1)
+    }
+    // Force the update of all the Receivers
+    function triggerReceivers() {
+      receivers.map(r => r.forceUpdate())
+    }
 
     /* The Emitter class is a component that can be placed anywhere down or up
      * the tree, and will contain the actual content to render.
@@ -55,11 +64,11 @@ export class EmitterReceiver {
 
           // For each child, remove it from the children list
           child.map(c => {
-            pipe.children.splice(pipe.children.indexOf(c), 1)
+            children.splice(children.indexOf(c), 1)
           })
 
           // Update each Receiver
-          pipe.triggerReceivers()
+          triggerReceivers()
         }
       }
 
@@ -73,10 +82,10 @@ export class EmitterReceiver {
           child = child.length ? child : [child]  // Convert into Array
 
           // Add all children to the list
-          pipe.children.push(...child)
+          children.push(...child)
 
           // Update each Receiver
-          pipe.triggerReceivers()
+          triggerReceivers()
         }
       }
 
@@ -116,42 +125,23 @@ export class EmitterReceiver {
       // When the component unmounts, it needs to be removed from
       // the list of Receivers
       componentWillUnmount() {
-        pipe.removeReceiver(this)
+        removeReceiver(this)
       }
 
       // When the component mounts, it needs to be added to the list
       // of Receivers
       componentWillMount() {
-        pipe.registerReceiver(this)
+        registerReceiver(this)
       }
 
       // When rendered, at Receiver component should display the children list
       render() {
         return (
           <div>
-            {pipe.children}
+            {children}
           </div>
         )
       }
     }
-
-    // The main pipe has to handle the adding, removing and updating of
-    // receivers
-    this.registerReceiver = this.registerReceiver.bind(this)
-    this.removeReceiver = this.removeReceiver.bind(this)
-    this.triggerReceivers  = this.triggerReceivers.bind(this)
-  }
-
-  // Add a Receiver to the list of Receivers
-  registerReceiver(r) {
-    this.receivers.push(r)
-  }
-  // Remove a Receiver from the list of Receivers
-  removeReceiver(r) {
-    this.receivers.splice(this.receivers.indexOf(r), 1)
-  }
-  // Force the update of all the Receivers 
-  triggerReceivers() {
-    this.receivers.map(r => r.forceUpdate())
   }
 }
