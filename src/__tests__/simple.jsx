@@ -33,6 +33,6 @@ const Box = ({children}) => (
   </div>
 )
 
-const Block = () => (
+export const Block = () => (
   <div className={'block'} style={{height: 20, width: 20, backgroundColor: 'blue'}}></div>
 )
