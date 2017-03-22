@@ -1,27 +1,78 @@
-# Boilerplate for creating React Npm packages with ES2015
-
-The package is based on [npm-base](https://github.com/kadirahq/npm-base) package by [Kadira](https://github.com/kadirahq) which is really great when you want to prepare Npm package. This one is prepared to be used as a starter point for React components which needs to be published on Npm.
-
-It includes linting with [ESLint](http://eslint.org/) and testing with [Mocha](https://mochajs.org/), [Enzyme](http://airbnb.io/enzyme/) and [JSDOM](https://github.com/tmpvar/jsdom).
-
-Also there is of course ES6 transpilation.
+# Render components across different parts of your application
 
 ## Usage
 
-1. Clone this repo
-2. Inside cloned repo run `npm install`
-3. If you want to run tests: `npm test` or `npm run testonly` or `npm run test-watch`. You need to write tests in `__tests__` folder. You need at least Node 4 on your machine to run tests.
-4. If you want to run linting: `npm test` or `npm run lint`. Fix bugs: `npm run lint-fix`. You can adjust your `.eslintrc` config file.
-5. If you want to run transpilation to ES5 in `dist` folder: `npm run prepublish` (standard npm hook).
+```jsx
+import {Emitter, Receiver} from 'react-replicate'
 
-## Blog post about it:
+// Root Component
+...
+  render() {
+    return (
+      <div style={{width: '100%', height: '100%', position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+        <MyApp />
+        <Receiver />
+      </div>
+    )
+  }
+...
 
-- [Creating React NPM packages with ES2015](http://julian.io/creating-react-npm-packages-with-es2015/)
+// Popover Component
 
-## Also check out
+const Popover = ({hide, children}) => (
+  <Emitter>
+    <div onClick={hide} style={{position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, backgroundColor: 'rgba(0, 0, 0, 0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+      <div style={{backgroundColor: 'white', padding: 20, borderRadius: 5}}>
+        {children}
+      </div>
+    </div>
+  </Emitter>
+)
 
-- [React Alert UI component](https://github.com/juliancwirko/react-s-alert)
-- [React project boilerplate with Webpack, HMR, React Router](https://github.com/juliancwirko/react-boilerplate)
+// Usage
+
+class MyApp extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      showPopover: false,
+    }
+    this.showPopover = this.showPopover.bind(this)
+    this.hidePopover = this.hidePopover.bind(this)
+  }
+
+  showPopover() {
+    this.setState({showPopover: true})
+  }
+
+  hidePopover() {
+    this.setState({hidePopover: false})
+  }
+
+  render() {
+    return (
+      <div>
+        <button onClick={this.showPopover}>
+          Hey Ho
+        </button>
+        {this.state.showPopover ? (
+          <Popover hide={this.hidePopover}>
+            Let's Go
+          </Popover>
+        ) : null}
+      </div>
+    )
+  }
+}
+```
+
+## Contributing
+
+```
+$ num i
+$ npm run lint
+$ npm run test
+```
 
 ## License
 
