@@ -23,8 +23,8 @@ describe('Emitter and Receiver', () => {
   it('should update children', () => {
     const Block = () => <div className={'block'}></div>
     const receiver = mount(<Receiver />)
-    function expectToFindBlocks(rec, count) {
-      expect(rec.find(Block)).to.have.length(count)
+    function expectToFindBlocks(receiver, count) {
+      expect(receiver.find(Block)).to.have.length(count)
     }
     expectToFindBlocks(receiver, 0)
     const emitter = mount(<Emitter />)
