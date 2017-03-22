@@ -1,5 +1,7 @@
 import React, {Component} from 'react'
-import {Emitter, Receiver} from '../index'
+import {EmitterReceiver} from '../index'
+
+const {Emitter, Receiver} = new EmitterReceiver()
 
 export default () => (
   <Container>
