@@ -14,7 +14,6 @@ describe('Simple', () => {
   it('should have 6 blocks', () => {
     const wrapper = mount(<Simple />);
     expect(wrapper.find(Block)).to.have.length(6);
-    wrapper.unmount();
   });
 });
 
@@ -38,8 +37,5 @@ describe('Emitter and Receiver', () => {
     expectToFindBlocks(receiver2, 2)
     emitter2.unmount()
     expectToFindBlocks(receiver, 1)
-
-    /*
-    */
   })
 })
