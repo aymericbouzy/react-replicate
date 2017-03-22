@@ -5,7 +5,10 @@ import {expect} from 'chai';
 import sinon from 'sinon';
 
 import Simple, {Block} from './simple';
-import {Emitter, Receiver} from '../index';
+import {EmitterReceiver} from '../index'
+
+const {Emitter, Receiver} = new EmitterReceiver()
+
 
 describe('Simple', () => {
   it('should have 6 blocks', () => {
@@ -13,6 +16,7 @@ describe('Simple', () => {
     expect(wrapper.find(Block)).to.have.length(6);
   });
 });
+
 
 describe('Emitter and Receiver', () => {
   it('should update children', () => {
