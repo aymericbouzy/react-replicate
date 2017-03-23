@@ -39,5 +39,7 @@ describe('Emitter and Receiver', () => {
     const receiver = mount(<Receiver />)
     const emitter = mount(<Emitter>Hello World!</Emitter>)
     expect(receiver.text()).to.equal('Hello World!')
+    emitter.setProps({children: null})
+    expect(receiver.text()).to.equal('')
   })
 })
