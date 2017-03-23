@@ -42,4 +42,30 @@ describe('Emitter and Receiver', () => {
     emitter.setProps({children: null})
     expect(receiver.text()).to.equal('')
   })
+
+  it('should render children in order of mount', () => {
+    const Toggler = ({show1, show2}) => (
+      <div>
+        {show1 ? (
+          <Emitter>
+            test1
+          </Emitter>
+        ) : null}
+        {show2 ? (
+          <Emitter>
+            test2
+          </Emitter>
+        ) : null}
+      </div>
+    )
+    const toggler = mount(<Toggler show1 />)
+    const receiver = mount(<Receiver />)
+    expect(receiver.text()).to.equal('test1')
+    toggler.setProps({show2: true})
+    expect(receiver.text()).to.equal('test1test2')
+    toggler.setProps({show1: false})
+    expect(receiver.text()).to.equal('test2')
+    toggler.setProps({show1: true})
+    expect(receiver.text()).to.equal('test2test1')
+  })
 })
