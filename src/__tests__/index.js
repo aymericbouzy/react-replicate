@@ -34,4 +34,10 @@ describe('Emitter and Receiver', () => {
     emitter2.unmount()
     expectToFindBlocks(receiver, 1)
   })
+
+  it('should render text children', () => {
+    const receiver = mount(<Receiver />)
+    const emitter = mount(<Emitter>Hello World!</Emitter>)
+    expect(receiver.text()).to.equal('Hello World!')
+  })
 })
